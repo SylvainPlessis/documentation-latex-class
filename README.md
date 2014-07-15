@@ -1,0 +1,2 @@
+documentation-latex-class
+=========================
