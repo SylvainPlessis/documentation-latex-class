@@ -10,4 +10,4 @@ and [Antioch](https://github.com/Planet-INC/model_doc.git).
 To see what's inside
 ====================
 
-Just type make and enjoy, don't be shy and read the code.
+Just type ``make'' and enjoy, don't be shy and read the code.
