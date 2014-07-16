@@ -135,14 +135,14 @@
 %%% physical constants equation management
 \newcommand{\make@meta@equation}[7]
 {
-\expandafter\gdef\csname#2\endcsname{\ensuremath{#3}}%                                         \"name"     produces "symbol"
-\expandafter\gdef\csname#2val\endcsname{\csname#7\endcsname{#4}\ifnum#1=0\else\,10^{#1}\fi}%   \"name"val  produces "value"
-\expandafter\gdef\csname#2dval\endcsname{\csname#7\endcsname{#5}}%                             \"name"dval produces "dvalue"
-\expandafter\gdef\csname#2num\endcsname{\csname#7\endcsname{#4}\ifnum#5=0\else%
-                                \,(\csname#2dval\endcsname)\fi\ifnum#1=0\else\,10^{#1}\fi}%    \"name"num  produces "value (dvalue)"
-\expandafter\gdef\csname#2unit\endcsname{\unit{#6}}%                                           \"name"unit produces "unit"
+\expandafter\gdef\csname#2\endcsname{\ensuremath{#3}}%                                                    \"name"     produces "symbol"
+\expandafter\gdef\csname#2val\endcsname{\ensuremath{\csname#7\endcsname{#4}\ifnum#1=0\else\,10^{#1}\fi}}% \"name"val  produces "value"
+\expandafter\gdef\csname#2dval\endcsname{\csname#7\endcsname{#5}}%                                        \"name"dval produces "dvalue"
+\expandafter\gdef\csname#2num\endcsname{\ensuremath{\csname#7\endcsname{#4}\ifnum#5=0\else%
+                                \,(\csname#2dval\endcsname)\fi\ifnum#1=0\else\,10^{#1}\fi}}%               \"name"num  produces "value (dvalue)"
+\expandafter\gdef\csname#2unit\endcsname{\unit{#6}}%                                                      \"name"unit produces "unit"
 \expandafter\gdef\csname#2Equation\endcsname{% %% equation
- \ensuremath{\csname#2\endcsname = \csname#2num\endcsname~\csname#2unit\endcsname}}%           \"name"Equation produces "symbol = value (dvalue)~unit"
+ \ensuremath{\csname#2\endcsname = \csname#2num\endcsname~\csname#2unit\endcsname}}%                      \"name"Equation produces "symbol = value (dvalue)~unit"
 }
 \newcommand{\make@equation}[6][0] %% name, symbol, value, dvalue, unit | symbol = value (dvalue) \unit{unit}
 {%
