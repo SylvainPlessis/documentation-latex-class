@@ -209,6 +209,7 @@
 \newlength{\EqCodew}
 \newlength{\maxwidth}
 \newcommand{\print@Object}{\relax}
+\newcommand{\object@code} [1]{\texttt{#1}}
 \newenvironment{equationCode}[1]
 {%
 \renewcommand{\theequation}{\arabic{chapter}.\arabic{equation}\protect\print@Object}
