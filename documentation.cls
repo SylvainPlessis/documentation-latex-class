@@ -20,6 +20,7 @@
 \RequirePackage[round]{natbib}
 \RequirePackage[strict]{changepage} % remark environment
 \RequirePackage[linkcolor=black,colorlinks=true,citecolor=black,urlcolor=blue]{hyperref}
+\usetikzlibrary{shapes.geometric}
 
 %%%%%%%%%%%%%%%ù
 %
