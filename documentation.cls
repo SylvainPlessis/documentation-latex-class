@@ -40,9 +40,9 @@
 }
 \newcommand{\set@length@leftside}[1]
 {\checkoddpage%
-\setlength{\leftside}{\marginparwidth}
-\setlength{\rightside}{\paperwidth - 0.5\marginparwidth - \textwidth - \marginparsep - \hoffset - 0.8in}
-\ifoddpage\setlength{#1}{\rightside}\else\setlength{#1}{\leftside}\fi
+\setlength{\leftside}{\marginparwidth}%
+\setlength{\rightside}{\paperwidth - 0.5\marginparwidth - \textwidth - \marginparsep - \hoffset - 0.8in}%
+\ifoddpage\setlength{#1}{\rightside}\else\setlength{#1}{\leftside}\fi%
 }
 
 
@@ -273,13 +273,15 @@
 \newlength{\graph@length}
 \newcommand{\make@graph@length}{\set@length@leftside{\graph@length}}
 \newcommand{\print@graph} [1]{{\includegraphics[width=\graph@length]{#1}}}
-\newcommand{\make@graph}  [1]{\renewcommand{\makegraph}{\noindent\make@@graph{\print@graph{#1}\rule{1ex}{0pt}}}}%
+\newcommand{\make@graph}  [1]{\renewcommand{\makegraph}{%
+                               \make@graph@length%
+                               \settoheight{\graph@size}{\print@graph{#1}}
+                                \noindent\make@@graph{\print@graph{#1}\rule{1ex}{0pt}}}}%
 \newcommand{\make@@graph} [1]{\makebox[0pt][r]{\raisebox{-0.5\graph@size}[0pt][0pt]{#1}}}%
 \newcommand{\make@@@graph}[1]{\ifx#1\relax%
                                \makeno@graph%
                                 \else%
-                               \make@graph@length%
-                               \settoheight{\graph@size}{\print@graph{#1}}\make@graph{#1}%
+                               \make@graph{#1}%
                               \fi%
                             }%
 \renewcommand\section[1][\relax]{\make@@@graph{#1}%
