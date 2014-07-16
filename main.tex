@@ -1,0 +1,198 @@
+\documentclass{documentation}
+\makeatletter
+\def\maketitle{%
+\begin{titlepage}
+\centering
+{\Huge\@title}\vskip0.5ex
+{\Large\@author}\vskip0.5ex
+{version~\theversion}\vskip1ex
+\includegraphics[height=10cm]{title_graph}
+\end{titlepage}
+}
+\make@equation{Rig}{\mathrm{R}}{8.3144621}{75}{J\,mol^{-1}\,K^{-1}}
+\make@equation[23]{NAvo}{\mathcal{N}_\text{Avo}}{6.02214129}{27}{mol^{-1}}
+\make@litteralEquation{vacPerme}{\mu_0}     {4\pi\,10^{-7}}{m\,kg\,s^2\,A^2}
+\makeatother
+\begin{document}
+
+\title{Documentation goodies}
+\author{S.~Plessis}
+\version{0}{0}{0}
+\maketitle
+
+\tableofcontents
+
+\begin{abstract}
+Some nice capabilities, most of them are for
+preamble macros and definitions.
+\end{abstract}
+
+\chapter{A nice picture for a chapter}
+\graphAtPaperCenter{chap_ex}
+
+\section[section_ex]{Works with section too}
+
+This class provides the command \verb!\graphAtPaperCenter[*width*]{*fig to insert*}! which
+will place the figure at the center of the paper, taking into
+account the two-sided margins, and will make it the paper width. A default
+argument enables to change the width of the graph to be inserted.
+
+The \verb!\section! command has been modified, it includes now an optional
+argument wich is a graph to be inserted in the left margin.
+
+\begin{verbatim}
+\chapter{A nice picture for a chapter}
+\graphAtPaperCenter{chap_ex}
+
+\section[section_ex]{Works with section too}
+\end{verbatim}
+
+The class takes automatically into account the size
+of the left margin (as we're on a double-sided document). It's still
+possible to lure it into thinking he's on the previous page, the
+principle is to be at the bottom of the page, just at the right
+amount of space so \TeX\ will make the changing page move after
+the width calculation of the graphics and before printing
+the section title. If you want an example, comment out all this
+paragraph except the first sentence.
+But in that case, a simple \verb!\newpage! will increment the page
+counter before the calculations of the width of the graphics,
+thus fix the possible problem.
+
+\section[sec_2]{Meta-meta macros and meta-macros}
+
+\subsection{Names}
+
+To define a formatting, there's the meta-meta macro \verb!make@!, it takes
+three arguments including an optional. It needs to be used between
+\verb!\makeatletter! and \verb!\makeatother! of course, and the
+idea is to create a special formatting for concepts. For instance,
+there are already defined the special formatting
+\begin{verbatim}
+\make@{program}   {sf}
+\make@{library}   {tt}
+\make@[bf]{object}{tt}
+\make@{file}      {sf}
+\make@{prog}      {prog@type}
+\end{verbatim}
+
+What is does is that for each call \verb!\make@[format again]{something}{format}!, it creates
+the macros
+\begin{itemize}
+\item \verb!\something!, that will format its argument 
+        (ex: \verb!\program{Doxygen}! gives \program{Doxygen});
+\item \verb!\make@something{hey}!, which will define the macro \verb!\hey! that
+        will print \verb!\something{hey}!;
+\item \verb!\font@something!, which format whatever argument you give it.
+\end{itemize}
+Typically, you provide a family (of font) as second argument, and a shape (of font)
+as optional argument.
+
+\subsection{Physical quantities}
+
+Another nice meta macro is the \verb!\make@equation!, it uses a meta-meta macro,
+but there's not a real interest in going into too much details. An example
+will be easier to understand:
+\begin{verbatim}
+\make@equation{Rig}{\mathrm{R}}{8.3144621}{75}{J\,mol^{-1}\,K^{-1}}
+\end{verbatim}
+will create the macros:
+\begin{itemize}
+\item \verb!\Rig!     which gives \Rig;
+\item \verb!\Rigval!  which gives \Rigval;
+\item \verb!\Rigdval! which gives \Rigdval;
+\item \verb!\Rignum!  which gives \Rignum;
+\item \verb!\Rigunit! which gives \Rigunit;
+\item \verb!\RigEquation! which gives \RigEquation.
+\end{itemize}
+An optional argument gives the power in scientific notation if needed:
+\begin{verbatim}
+\make@equation[23] {NAvo} {\mathcal{N}_\text{Avo}}{6.02214129}{27}{mol^{-1}}
+\end{verbatim}
+\verb!\NAvoval! gives \NAvoval.
+
+Sometimes, we want to define a physical quantity with respect to others:
+\begin{verbatim}
+\make@litteralEquation{vacPerme}{\mu_0}{4\pi\,10^{-7}}{m\,kg\,s^2\,A^2}
+\end{verbatim}
+and the vaccum permeability will be given by \verb!\vacPerme! and friends:
+\begin{itemize}
+\item \verb!\vacPerme!         gives \vacPerme;
+\item \verb!\vacPermeval!      gives \vacPermeval;
+\item \verb!\vacPermedval!     gives \vacPermedval;
+\item \verb!\vacPermenum!      gives \vacPermenum;
+\item \verb!\vacPermeunit!     gives \vacPermeunit;
+\item \verb!\vacPermeEquation! gives \vacPermeEquation;
+\end{itemize}
+
+\section{Units}
+
+The units are printed using the \verb!unit{}! command. It
+works regardless if we are in math mode or not: the
+commands \verb!$\unit{J}$! and \verb!\unit{J}! will produce
+strictly the same output. As for formatting between units,
+you \emph{\underline{\textbf{must}}} use  the small space \verb!\,!. If you want something
+else, redefine the macro \verb!\unit@parser!, for instance
+\begin{verbatim}
+\renewcommand{\unit@parser}{\cdot}
+\end{verbatim}
+will make the units look from \unit{J\,s^{-1}} to
+{\makeatletter
+\renewcommand{\unit@parser}{\cdot}
+\makeatother
+\unit{J\,s^{-1}}}. In all cases, you write \verb!\unit{J\,s^{-1}}!.
+
+\chapter{Other stuff}
+\graphAtPaperCenter{chap_2}
+
+\section{Equations}
+
+Now we refer to equations that are usually somewhere in the
+code, and certainly in some object. Let's say we have a
+\object{CppObject}
+in which there is the fundamental equation
+$x + y = z$, we will state it as:
+\begin{verbatim}
+\begin{equationCode}{CppObject}
+x + y = z
+\end{equationCode}
+\end{verbatim}
+it will print
+\begin{equationCode}{CppObject}
+x + y = z
+\label{eqCode}
+\end{equationCode}
+The nice thing is that the length of the object's name will adapt
+if need be:
+\begin{equationCode}{ALongCppObjectNameForAComplicatedThing}
+x^2 + y^2 = z^2
+\end{equationCode}
+
+Of course, because we are civilized people, we want chemical
+reactions:
+\begin{verbatim}
+\begin{chemicalEquation}
+\ce{N2 + O2 -> Air}
+\end{chemicalEquation}
+\end{verbatim}
+which will print as:
+\begin{chemicalEquation}
+\ce{N2 + O2 -> Air}
+\label{chemEq}
+\end{chemicalEquation}
+
+And ``bien s\^ur'', you can label them, as show Eq.~\ref{eqCode} and
+Reac.~\ref{chemEq}.
+
+\section{Others}
+
+\begin{remark}
+There is a \textsf{remark} environment, where you can
+put your remarks.
+\end{remark}
+
+\warning{In case something needs to be known.}
+
+There is a \verb!\version{major}{minor}{micro}! macro,
+\verb!\theversion! will print it (see title page).
+\end{document}

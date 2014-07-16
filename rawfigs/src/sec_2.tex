@@ -1,0 +1,39 @@
+\documentclass{article}
+\usepackage{tikz}
+\usetikzlibrary{calc,shapes}
+\usepackage{geometry}
+\geometry{paperwidth=6.5cm,paperheight=7.8cm,top=2pt,left=0pt,right=0pt,bottom=0pt}
+\pagestyle{empty}
+\begin{document}
+\centering
+\begin{tikzpicture}
+\node[shape=ellipse,draw,shading=radial,inner color=white,outer color=brown] (body) 
+	at (0,0) [minimum width=2.8cm,minimum height=3.7cm]{};
+\node[shape=ellipse,draw,shade=axis,left color=brown,right color=brown!20,shading angle=30]
+	(leftleg) at (body.south east) [anchor=west,rotate=-60,minimum height=10mm, minimum width=20mm]{};
+\node[shape=ellipse,draw,shade=axis,left color=brown,right color=brown!20,shading angle=-30]
+	(rightleg) at (body.south west)[anchor=east,rotate=60,minimum height=10mm, minimum width=20mm]{};
+\node[shape=ellipse,draw,shade=axis,left color=brown,right color=brown!20,shading angle=120]
+	(leftarm) at (body.40) [rotate=30,minimum width=20mm,minimum height=10mm,anchor=west]{};
+\path[rotate=30] \foreach \angle in {-25,0,25}{%
+	(body.40) arc(-180:\angle:9mm and 4mm) node[scale=0.45,fill=gray,circle]{}};
+\fill[gray] (body.40) +(30:15mm) circle(5pt);
+\node[shape=ellipse,draw,shading=axis,left color=brown!20,right color=brown,shading angle=60]
+	(rightarm) at (body.140)[rotate=-30,minimum width=20mm,minimum height=10mm,anchor=east]{};
+\path[rotate=-30] \foreach \angle in {155,180,205}{%
+	(body.140) arc(0:\angle:9mm and 4mm) node[scale=0.45,fill=gray,circle]{}};
+\fill[gray] (body.140) +(150:15mm) circle(5pt);
+\node[circle,draw,shading=radial,inner color=white,outer color=brown](head) at (body.north)
+	[minimum size=2cm,anchor=south]{};
+\draw[fill=brown] (head.65)..controls +(70:5mm) and +(60:5mm).. (head.45) arc(45:65:1cm);
+\fill (head.60)..controls +(70:3mm) and +(60:3mm).. (head.50);
+\draw[fill=brown] (head.115)..controls +(110:5mm) and +(120:5mm).. (head.135) arc(135:115:1cm);
+\fill (head.120)..controls +(110:3mm) and +(120:3mm).. (head.130);
+\fill ([yshift=-1mm]head) circle(2pt);
+\draw ([xshift=5mm,yshift=3mm]head) arc(45:135:2mm);
+\draw ([xshift=-5mm,yshift=3mm]head) arc(135:45:2mm);
+\draw ([xshift=-1.5mm,yshift=-5mm]head) arc(-135:-45:2mm);
+\draw (0,-5pt) \foreach \i in {0,0.1,...,5}{%
+-- ($(0,-5pt) !\i! \i*180:(0.3pt,-5.3pt)$)};
+\end{tikzpicture}
+\end{document}

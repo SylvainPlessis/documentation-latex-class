@@ -1,0 +1,55 @@
+\documentclass{article}
+\usepackage{tikz,geometry}
+\usetikzlibrary{decorations.pathmorphing,shapes}
+\geometry{left=0pt,top=2pt,right=0pt,bottom=0pt,paperwidth=3.5cm,paperheight=4.5cm}
+\pagestyle{empty}
+\begin{document}
+\centering
+\pgfdeclarelayer{background}
+\pgfdeclarelayer{foreground}
+\pgfsetlayers{background,main,foreground}
+
+\begin{tikzpicture}
+\node[shading=radial,inner color=white,outer color=pink,
+		draw,circle,minimum size=2.5cm,name=body] at (0,0){};
+\draw[line width=2mm,decorate,decoration={bent,amplitude=0.5,aspect=0.3}] (95:1.15cm) -- (80:0.6cm);
+\draw[decorate,decoration={coil,aspect=-1.5,segment length=2.5mm}] (0,0) arc(-120:-100:5cm);
+\draw[shading=axis,shading angle=-115,top color=brown,bottom color=white] 
+	(body.-120) -- (-116:2cm) --(-114:2cm) -- (body.-110);
+\draw[shading=axis,shading angle=-110,top color=brown,bottom color=white] 
+	(body.-115) -- (-111:2cm) --(-109:2cm)-- (body.-105);
+\draw[shading=axis,shading angle=-65,top color=brown,bottom color=white] 
+	(body.-60) -- (-64:2cm)--(-66:2cm) -- (body.-70);
+\draw[shading=axis,shading angle=-70,top color=brown,bottom color=white] 
+	(body.-65) -- (-69:2cm)--(-71:2cm) -- (body.-75);
+\begin{pgfonlayer}{background}
+\draw ([xshift=-2mm,yshift=2mm]body.120) node(head)
+	[shading=radial,inner color=white,outer color=pink,draw,circle,minimum size=1.1cm]{};
+\end{pgfonlayer}
+\draw([xshift=0.7mm]head.180) node(nose)
+	[draw,cylinder,shading=axis,left color=white,right color=pink,shape border rotate=180,aspect=0.5]{};
+\draw[fill] ([xshift=2.5pt,yshift=-0.2pt]nose.west) ellipse(0.2pt and 1.0pt)
+	([xshift=1pt,yshift=0.2pt]nose.west) ellipse(0.2pt and 1.0pt);
+%
+\draw[fill=pink]([xshift=-2pt,yshift=-0.1pt]head.90) 
+	arc(185:150:2.6mm) arc(100:80:5mm) --(head.80);
+\draw[fill=pink]([xshift=0.6mm,yshift=-1.3mm]head.90) arc(210:150:3mm) 
+	node[opacity=0](a){} arc(100:80:5mm) arc(30:-30:3mm);
+\draw[fill=pink!70] (a.center) ..controls +(-90:3pt) and +(107:4pt) .. ++(0.87mm,-2mm) 
+	.. controls +(73:4pt) and +(-90:3pt) .. ++(0.87mm,2mm);
+%
+\begin{scope}
+\clip(head.center) circle(0.55cm);
+\draw ([xshift=7pt,yshift=-2pt]head.150) arc(95:75:11pt)
+	([xshift=8pt,yshift=-1.9pt]head.150)  ..controls+(85:6pt) and +(90:7pt)
+	.. ([xshift=10pt,yshift=-2pt]head.150);
+\fill ([xshift=8.4pt,yshift=-1.9pt]head.150)  ..controls+(85:4pt) and +(90:5pt)
+	.. ([xshift=9.6pt,yshift=-1.9pt]head.150);
+\draw ([yshift=-1.5pt]head.150) arc(95:75:11pt)
+	([xshift=1pt,yshift=-1.4pt]head.150)  ..controls+(85:6pt) and +(90:7pt)
+	.. ([xshift=3pt,yshift=-1.5pt]head.150);
+\fill ([xshift=1.4pt,yshift=-1.4pt]head.150)  ..controls+(85:4pt) and +(90:5pt)
+	.. ([xshift=2.6pt,yshift=-1.4pt]head.150);
+\end{scope}
+\end{tikzpicture}
+\end{document}
