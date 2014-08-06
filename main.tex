@@ -187,11 +187,18 @@ Reac.~\ref{chemEq}.
 \section{Others}
 
 \begin{remark}
-There is a \textsf{remark} environment, where you can
-put your remarks.
+There is a \texttt{remark} environment, where you can
+put your remarks. This remark is produced by:
+\begin{verbatim}
+\begin{remark}
+There is a \texttt{remark} environment, where you can
+put your remarks. This remark is produced by:
+verbatim-mise-en-abyme
+\end{remark}
+\end{verbatim}
 \end{remark}
 
-\warning{In case something needs to be known.}
+\warning{In case something needs to be known, there is a \textbackslash warning\{*text*\} macro.}
 
 There is a \verb!\version{major}{minor}{micro}! macro,
 \verb!\theversion! will print it (see title page).
