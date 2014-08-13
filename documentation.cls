@@ -107,30 +107,77 @@
 %%% unit management here
 %% default parser is `\,'
 %% redefine \unit@parser in
-%% preamble to change this
+%% to change this with \unitParser{*new definition*}
 %%
 %% !!!  always print `\,' in documentation  !!!
 %% !!!  only the pdf output will be changed !!!
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\gdef\unit@parser{\;}
-\newcommand{\prev}{\relax}
+%% definitions
+\newcommand{\unit@parser}{\;}
+\newcommand{\unitParser}[1]{\renewcommand{\unit@parser}{#1}}
+\newcommand{\unit@atom@font}{\tt}
+\newcommand{\unit@atom}[1]{\text{\unit@atom@font#1}}
+\newcommand{\unit@power@font}[1]{\mathtt{#1}}
+\newcommand{\unit@power}[1]{\unit@power@font{#1}}
+%% internal mechanism
+\newif\ifunit@power\unit@powerfalse%
+\newif\ifsubscript@\subscript@false%
+\newcount\n@letters\n@letters=0%
+\newcount\cur@letter\cur@letter=0%
+\def\unit@stack{%
+\cur@letter=0%
+\loop\ifnum\cur@letter<\n@letters%
+   \advance\cur@letter by 1%
+  \csname letter@unit@\the\cur@letter\endcsname%
+\repeat%
+\n@letters=0%
+}%
+\newcommand{\add@unit}[1]{%
+\advance\n@letters by 1%
+\expandafter\gdef\csname letter@unit@\the\n@letters\endcsname{#1}%
+}
+%
+\newcommand{\flush@unit}{%
+\ifnum\the\n@letters=0
+     \ClassError{documentation}{Unit is not properly written}
+                {Units are to be formatted as \tt unit \verb!\,! unit \rm\MessageBreak
+                 with \texttt{unit} being the unit and its power written as if\MessageBreak
+                 in math mode.}
+\else
+  \ifunit@power% power to be printed
+     {^{\unit@power{\unit@stack}}}%
+     \unit@powerfalse%
+  \else% text to be printed
+    \ifsubscript@_\fi{\unit@atom{\unit@stack}}%
+    \subscript@false%
+  \fi
+\fi%
+\n@letters=0%
+}
+%%%
+%%% parser
 \newcommand{\parse@unit}[1]{%
-\let\go@next\parse@unit%
+\def\go@next##1{\parse@unit{##1}}%
 \ifx#1\relax%%
-  \let\go@next=\relax%
+  \let\go@next=\flush@unit%
 \else%
-  \ifx#1\,\unit@parser\else%
-    \ifx^#1 \renewcommand{\prev}{^}\else% if superscript
-        \ifx_#1\renewcommand{\prev}{_}\else% if subscript
-         \if_\prev \prev{#1}\renewcommand{\prev}{\relax}\else
-          \if^\prev \prev{#1}\renewcommand{\prev}{\relax}\else#1\fi\fi
-        \fi%
+  \ifx#1\,%
+    \flush@unit\unit@parser%
+  \else%
+    \ifx^#1% if superscript
+      \flush@unit\unit@powertrue%
+    \else%
+      \ifx_#1% if subscript
+        \flush@unit\subscript@true%
+      \else%
+        \add@unit{#1}%
+      \fi%
     \fi%
   \fi
 \fi%
 \go@next%
 }
-\newcommand{\unit}[1]{\ensuremath{\mathtt{\protect\parse@unit#1\relax}}}
+\newcommand{\unit}[1]{\ensuremath{\protect\parse@unit#1\relax}}
 \newcommand{\nounit}{\unit{no~unit}}
 
 %%% physical constants equation management

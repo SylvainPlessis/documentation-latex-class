@@ -132,14 +132,13 @@ works regardless if we are in math mode or not: the
 commands \verb!$\unit{J}$! and \verb!\unit{J}! will produce
 strictly the same output. As for formatting between units,
 you \emph{\underline{\textbf{must}}} use  the small space \verb!\,!. If you want something
-else, redefine the macro \verb!\unit@parser!, for instance
+else, redefine the parser using the macro \verb!unitParser{*new definition*}!,
+for instance:
 \begin{verbatim}
-\renewcommand{\unit@parser}{\cdot}
+\unitParser{\cdot}
 \end{verbatim}
 will make the units look from \unit{J\,s^{-1}} to
-{\makeatletter
-\renewcommand{\unit@parser}{\cdot}
-\makeatother
+{\unitParser{\cdot}
 \unit{J\,s^{-1}}}. In all cases, you write \verb!\unit{J\,s^{-1}}!.
 
 \chapter{Other stuff}
