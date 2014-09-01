@@ -4,6 +4,8 @@
 
 \LoadClass[twoside]{report}
 
+\tracingmacros=2
+
 \RequirePackage{booktabs}
 \RequirePackage{geometry}
 \RequirePackage{amsmath}
@@ -19,14 +21,15 @@
 \RequirePackage{longtable}
 \RequirePackage[round]{natbib}
 \RequirePackage[strict]{changepage} % remark environment
+\RequirePackage{listings} % C++, html environment
 \RequirePackage[linkcolor=black,colorlinks=true,citecolor=black,urlcolor=blue]{hyperref}
 \usetikzlibrary{shapes.geometric}
 
-%%%%%%%%%%%%%%%ù
+%%%%%%%%%%%%%%%
 %
 % layout
 %
-%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%
 \setlength{\marginparwidth}{103pt}
 \setlength{\marginparsep}{5pt}
 \addtolength{\textheight}{1cm}
@@ -54,6 +57,17 @@
 %%%% meta-meta-function
 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% modifier@definition
+%%  useful stuff mostly for the terminal
+%%  things: we have a lot of terminal parameters,
+%%  so the convention is to have the parameters named:
+%%  terminal@parameter, and the modifier named
+%%  terminalModparameter.
+\newcommand{\modifier@definition}[2]% 1 is global name, 2 is parameter, 3 is new definition
+{
+  \expandafter\gdef\csname#1Mod#2\endcsname##1{\expandafter\def\csname#1@#2\endcsname{##1}}%
+}
 
 %%  make@something: 
 %%    - arg 1: something (name/root of macros)
@@ -302,7 +316,7 @@
 \end{tikzpicture}
 }
 \newcommand{\warning}[1]{%
-\hspace{-1in}\warningsign\textbf{\textcolor{red}%
+\noindent\makebox[0pt][r]{\warningsign\hspace{5pt}}\textbf{\textcolor{red}%
 {\large\sc #1}}
 }
 
@@ -363,6 +377,86 @@
 \addtolength{\tocenter}{0.5\textwidth}% + 0.5\remark@sep
 \if@remark\addtolength{\tocenter}{-1.5\remark@sep}\fi %
 \noindent\hspace{\tocenter}\makebox[0pt]{#1}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% code
+%% code + output two column
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% language loading
+\lstloadlanguages{C++,XML}
+\lstset{basicstyle=\footnotesize,commentstyle=\color{blue}\bf,stringstyle=\color{magenta}\bf,
+        numbers=left,numbersep=10pt,numberstyle=\scriptsize}
+
+%% c++ code one column
+\lstnewenvironment{cpp}[1][\footnotesize]
+{\lstset{language=C++,
+         morekeywords={Scalar,CoeffType,StateType},keywordstyle=\bf,
+         morestring=[b]",
+         morecomment=[s]{/*}{*/},morecomment=[l]{//},
+         basicstyle=#1}
+}
+{}
+
+%% c++ code two column
+\lstnewenvironment{cpp|}
+{\lstset{linewidth=0.9\linewidth,frame=r,framesep=-5pt,
+         morekeywords={Scalar,CoeffType,StateType},keywordstyle=\bf,
+         morestring=[b]",
+         language=C++,morecomment=[s]{/*}{*/},morecomment=[l]{//}}
+}
+{}
+
+%% c++ code two column
+\lstnewenvironment{|cpp}
+{\lstset{linewidth=0.9\linewidth,frame=l,framesep=10pt, numbers=right,
+         morekeywords={Scalar,CoeffType,StateType},keywordstyle=\bf,
+         morestring=[b]",
+         language=C++,morecomment=[s]{/*}{*/},morecomment=[l]{//}}
+}
+{}
+
+%% xml code one column
+\lstnewenvironment{xml}[1][\footnotesize]
+{\lstset{language=XML,
+         morestring=[b]",
+         basicstyle=#1}
+}
+{}
+
+% output in terminal
+%%def
+\newlength{\outdepth}
+\newcommand{\terminal@write}{green!80}
+\newcommand{\terminal@background}{black}
+\newcommand{\terminal@font}{\sf}
+\newcommand{\terminal@PSone}{[user@here \$]}
+%%%modifiers
+\modifier@definition{terminal}{write}
+\modifier@definition{terminal}{background}
+\modifier@definition{terminal}{font}
+\modifier@definition{terminal}{PSone}
+%%
+\newcommand{\terminalLine}[1]{\terminal@PSone #1}
+\newcommand{\@terminal}[1]{%
+\begin{minipage}[c][\outdepth][c]{\linewidth}
+\color{\terminal@write}%
+\terminal@font%
+\terminal@PSone #1
+\end{minipage}
+}
+\newcommand{\terminal}[1]{%
+\settototalheight{\outdepth}{\parbox{\linewidth}{\terminal@PSone #1}}
+\setlength{\outdepth}{1.1\outdepth}
+\ifdim\outdepth < 4em%
+  \setlength{\outdepth}{5em}%
+\fi%
+\begin{center}
+\makebox[0pt][c]{\fcolorbox{white}{\terminal@background}{\@terminal{#1}}}
+\end{center}
 }
 
 %\newcommand\chapter{\if@openright\cleardoublepage\else\clearpage\fi

@@ -1,6 +1,6 @@
 \documentclass{article}
 \usepackage{tikz}
-\usetikzlibrary{calc,shapes}
+\usetikzlibrary{calc,shapes,shadings}
 \usepackage{geometry}
 \geometry{paperwidth=6.5cm,paperheight=7.8cm,top=2pt,left=0pt,right=0pt,bottom=0pt}
 \pagestyle{empty}
@@ -9,11 +9,11 @@
 \begin{tikzpicture}
 \node[shape=ellipse,draw,shading=radial,inner color=white,outer color=brown] (body) 
 	at (0,0) [minimum width=2.8cm,minimum height=3.7cm]{};
-\node[shape=ellipse,draw,shade=axis,left color=brown,right color=brown!20,shading angle=30]
+\node[shape=ellipse,draw,shading=axis,left color=brown,right color=brown!20,shading angle=30]
 	(leftleg) at (body.south east) [anchor=west,rotate=-60,minimum height=10mm, minimum width=20mm]{};
-\node[shape=ellipse,draw,shade=axis,left color=brown,right color=brown!20,shading angle=-30]
+\node[shape=ellipse,draw,shading=axis,left color=brown,right color=brown!20,shading angle=-30]
 	(rightleg) at (body.south west)[anchor=east,rotate=60,minimum height=10mm, minimum width=20mm]{};
-\node[shape=ellipse,draw,shade=axis,left color=brown,right color=brown!20,shading angle=120]
+\node[shape=ellipse,draw,shading=axis,left color=brown,right color=brown!20,shading angle=120]
 	(leftarm) at (body.40) [rotate=30,minimum width=20mm,minimum height=10mm,anchor=west]{};
 \path[rotate=30] \foreach \angle in {-25,0,25}{%
 	(body.40) arc(-180:\angle:9mm and 4mm) node[scale=0.45,fill=gray,circle]{}};

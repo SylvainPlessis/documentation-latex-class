@@ -7,11 +7,13 @@
 {\Large\@author}\vskip0.5ex
 {version~\theversion}\vskip1ex
 \includegraphics[height=10cm]{title_graph}
+\setcounter{page}{-1}
 \end{titlepage}
 }
 \make@equation{Rig}{\mathrm{R}}{8.3144621}{75}{J\,mol^{-1}\,K^{-1}}
 \make@equation[23]{NAvo}{\mathcal{N}_\text{Avo}}{6.02214129}{27}{mol^{-1}}
 \make@litteralEquation{vacPerme}{\mu_0}     {4\pi\,10^{-7}}{m\,kg\,s^2\,A^2}
+\make@library{Antioch}
 \makeatother
 \begin{document}
 
@@ -20,12 +22,12 @@
 \version{0}{0}{0}
 \maketitle
 
-\tableofcontents
-
 \begin{abstract}
 Some nice capabilities, most of them are for
 preamble macros and definitions.
 \end{abstract}
+
+\tableofcontents
 
 \chapter{A nice picture for a chapter}
 \graphAtPaperCenter{chap_ex}
@@ -183,6 +185,290 @@ which will print as:
 And ``bien s\^ur'', you can label them, as show Eq.~\ref{eqCode} and
 Reac.~\ref{chemEq}.
 
+\section{Codes}
+
+It happens quite often for some serious application that
+you want to give some terminal examples:
+\begin{verbatim}
+\terminal{I am writing in the terminal}
+\end{verbatim}
+
+\terminal{I am writing in the terminal}
+
+Now the terminal is fully customizable. Its parameters are:
+\begin{itemize}
+\item the characters' color;
+\item the background color;
+\item the font; and
+\item the PS1.
+\end{itemize}
+All are modifiable via the commands \verb!terminalMod*name*!,
+and all modifications follows \TeX's rules of scope.
+{
+\begin{verbatim}
+\terminalModPSone{[other user@somewhere else \$]}
+\terminalModwrite{black}
+\terminalModfont{\tt}
+\terminalModbackground{cyan}
+\terminal{I am writing too!}
+\end{verbatim}
+\terminalModPSone{[other user@somewhere else \$]}
+\terminalModwrite{black}
+\terminalModfont{\tt}
+\terminalModbackground{cyan}
+\terminal{I am writing too!}
+}
+
+Now the real interest in having a terminal is not
+necessarily showing off, we may want to show the effect
+of some program we wrote the world can't live without.
+Using the package \textsf{listings}, this class defines
+a \texttt{C++} and a \texttt{xml} environment. More
+details on the subtleties to be found in the
+\textsf{listings} package documentation.
+
+Here are some example taken from \Antioch's documentation.
+The \texttt{xml} environment,
+\begin{verbatim}
+\begin{xml}
+<?xml version="1.0"?>
+<ctml>
+  <reactionData>
+    <!-- my very first xml reaction, how cute! -->
+    <reaction reversible="yes" type="Elementary" id="Reaction1">
+      <equation>NO + O [=] O2 + N </equation>
+      <reactants>NO:1 O:1 </reactants>
+      <products>O2:1 N:1 </products>
+      <rateCoeff>
+        <Arrhenius>
+           <A units="m3/kmol/s">8.4e+09</A>
+           <E units="cal/mol">38526.0</E>
+        </Arrhenius>
+      </rateCoeff>
+    </reaction>
+  </reactionData>
+</ctml>
+\end{xml}
+\end{verbatim}
+gives
+\begin{xml}
+<?xml version="1.0"?>
+<ctml>
+  <reactionData>
+    <!-- my very first xml reaction, how cute! -->
+    <reaction reversible="yes" type="Elementary" id="Reaction1">
+      <equation>NO + O [=] O2 + N </equation>
+      <reactants>NO:1 O:1 </reactants>
+      <products>O2:1 N:1 </products>
+      <rateCoeff>
+        <Arrhenius>
+           <A units="m3/kmol/s">8.4e+09</A>
+           <E units="cal/mol">38526.0</E>
+        </Arrhenius>
+      </rateCoeff>
+    </reaction>
+  </reactionData>
+</ctml>
+\end{xml}
+
+And the \textsf{cpp} environment
+\begin{verbatim}
+\begin{cpp} 
+// 1 gram 
+// light celerity
+// Energy contained in 1 gram
+Antioch::PhysicalQuantity<double> m(1.,"g"), c(299792458.,"m.s-1"), 
+                                  E = m * c * c; 
+
+std::cout << E.value() << " " << E.unit() << std::endl;
+
+E.change_unit_to("J");
+std::cout << E.value() << " " << E.unit() << std::endl;
+
+E.change_unit_to("cal");
+std::cout << E.value() << " " << E.unit() << std::endl;
+
+E.change_unit_to_SI();
+std::cout << E.value() << " " << E.unit() << std::endl;
+\end{cpp}
+\end{verbatim}
+which gives
+\begin{cpp} 
+// 1 gram 
+// light celerity
+// Energy contained in 1 gram
+Antioch::PhysicalQuantity<double> m(1.,"g"), c(299792458.,"m.s-1"), 
+                                  E = m * c * c; 
+
+std::cout << E.value() << " " << E.unit() << std::endl;
+
+E.change_unit_to("J");
+std::cout << E.value() << " " << E.unit() << std::endl;
+
+E.change_unit_to("cal");
+std::cout << E.value() << " " << E.unit() << std::endl;
+
+E.change_unit_to_SI();
+std::cout << E.value() << " " << E.unit() << std::endl;
+\end{cpp}
+
+It is often useful to show the results of a specific program
+on the terminal, as in the example above. Thus there are
+also the \verb!cpp|! and \verb!|cpp! environments that will
+basically only draw a vertical line where we expect it. It
+is useful in the given cases below:
+\begin{verbatim}
+\noindent
+\begin{minipage}{0.55\linewidth}
+\begin{cpp|} 
+// 1 gram 
+// light celerity
+// Energy contained in 1 gram
+Antioch::PhysicalQuantity<double> 
+        m(1.,"g"),
+        c(299792458.,"m.s-1"),
+        E = m * c * c; 
+
+std::cout << E.value() << " " 
+          << E.unit() << std::endl;
+
+E.change_unit_to("J");
+std::cout << E.value() << " " 
+          << E.unit() << std::endl;
+
+E.change_unit_to("cal");
+std::cout << E.value() << " " 
+          << E.unit() << std::endl;
+
+E.change_unit_to_SI();
+std::cout << E.value() << " " 
+          << E.unit() << std::endl;
+\end{cpp|}
+\end{minipage}\hfill
+\begin{minipage}{0.44\linewidth}
+\terminal{%
+./program.x\\
+8.987552e+16 g.m.s-1.m.s-1\\
+8.987552e+13 J\\
+2.146640e+13 cal \\
+8.987552e+13 kg.m2.s-2%
+}
+\end{minipage}
+\end{verbatim}
+That will produces\\
+\noindent
+\begin{minipage}{0.55\linewidth}
+\begin{cpp|} 
+// 1 gram 
+// light celerity
+// Energy contained in 1 gram
+Antioch::PhysicalQuantity<double> 
+        m(1.,"g"),
+        c(299792458.,"m.s-1"),
+        E = m * c * c; 
+
+std::cout << E.value() << " " 
+          << E.unit() << std::endl;
+
+E.change_unit_to("J");
+std::cout << E.value() << " " 
+          << E.unit() << std::endl;
+
+E.change_unit_to("cal");
+std::cout << E.value() << " " 
+          << E.unit() << std::endl;
+
+E.change_unit_to_SI();
+std::cout << E.value() << " " 
+          << E.unit() << std::endl;
+\end{cpp|}
+\end{minipage}\hfill
+\begin{minipage}{0.44\linewidth}
+\terminal{%
+./program.x\\
+8.987552e+16 g.m.s-1.m.s-1\\
+8.987552e+13 J\\
+2.146640e+13 cal \\
+8.987552e+13 kg.m2.s-2%
+}
+\end{minipage}
+And the same thing but the other way
+around:
+\begin{verbatim}
+\noindent
+\begin{minipage}{0.44\linewidth}
+\terminal{%
+./program.x\\
+8.987552e+16 g.m.s-1.m.s-1\\
+8.987552e+13 J\\
+2.146640e+13 cal \\
+8.987552e+13 kg.m2.s-2%
+}
+\end{minipage}\hfill
+\begin{minipage}{0.55\linewidth}
+\begin{|cpp} 
+// 1 gram 
+// light celerity
+// Energy contained in 1 gram
+Antioch::PhysicalQuantity<double> 
+        m(1.,"g"),
+        c(299792458.,"m.s-1"),
+        E = m * c * c; 
+
+std::cout << E.value() << " " 
+          << E.unit() << std::endl;
+
+E.change_unit_to("J");
+std::cout << E.value() << " " 
+          << E.unit() << std::endl;
+
+E.change_unit_to("cal");
+std::cout << E.value() << " " 
+          << E.unit() << std::endl;
+
+E.change_unit_to_SI();
+std::cout << E.value() << " " 
+          << E.unit() << std::endl;
+\end{|cpp}
+\end{minipage}
+\end{verbatim}
+\noindent
+\begin{minipage}{0.44\linewidth}
+\terminal{%
+./program.x\\
+8.987552e+16 g.m.s-1.m.s-1\\
+8.987552e+13 J\\
+2.146640e+13 cal \\
+8.987552e+13 kg.m2.s-2%
+}
+\end{minipage}\hfill
+\begin{minipage}{0.55\linewidth}
+\begin{|cpp} 
+// 1 gram 
+// light celerity
+// Energy contained in 1 gram
+Antioch::PhysicalQuantity<double> 
+        m(1.,"g"),
+        c(299792458.,"m.s-1"),
+        E = m * c * c; 
+
+std::cout << E.value() << " " 
+          << E.unit() << std::endl;
+
+E.change_unit_to("J");
+std::cout << E.value() << " " 
+          << E.unit() << std::endl;
+
+E.change_unit_to("cal");
+std::cout << E.value() << " " 
+          << E.unit() << std::endl;
+
+E.change_unit_to_SI();
+std::cout << E.value() << " " 
+          << E.unit() << std::endl;
+\end{|cpp}
+\end{minipage}
+
 \section{Others}
 
 \begin{remark}
@@ -201,4 +487,5 @@ verbatim-mise-en-abyme
 
 There is a \verb!\version{major}{minor}{micro}! macro,
 \verb!\theversion! will print it (see title page).
+
 \end{document}
