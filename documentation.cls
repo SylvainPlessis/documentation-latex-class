@@ -132,7 +132,7 @@
 \newcommand{\unit@atom@font}{\tt}
 \newcommand{\unit@atom}[1]{\text{\unit@atom@font#1}}
 \newcommand{\unit@power@font}[1]{\mathtt{#1}}
-\newcommand{\unit@power}[1]{\unit@power@font{#1}}
+\newcommand{\unit@power}[1]{\unit@atom{#1}}%{\unit@power@font{#1}}
 %% internal mechanism
 \newif\ifunit@power\unit@powerfalse%
 \newif\ifsubscript@\subscript@false%
@@ -141,13 +141,13 @@
 \def\unit@stack{%
 \cur@letter=0%
 \loop\ifnum\cur@letter<\n@letters%
-   \advance\cur@letter by 1%
+  \advance\cur@letter by 1\relax%
   \csname letter@unit@\the\cur@letter\endcsname%
 \repeat%
 \n@letters=0%
 }%
 \newcommand{\add@unit}[1]{%
-\advance\n@letters by 1%
+\advance\n@letters by 1\relax%
 \expandafter\gdef\csname letter@unit@\the\n@letters\endcsname{#1}%
 }
 %
@@ -159,11 +159,14 @@
                  in math mode.}
 \else
   \ifunit@power% power to be printed
-     {^{\unit@power{\unit@stack}}}%
+     ^{\unit@power{\unit@stack}}%
      \unit@powerfalse%
   \else% text to be printed
-    \ifsubscript@_\fi{\unit@atom{\unit@stack}}%
-    \subscript@false%
+    \ifsubscript@%
+        \subscript@false%
+        _%
+    \fi% if it is a subscript
+    {\unit@atom{\unit@stack}}%
   \fi
 \fi%
 \n@letters=0%
