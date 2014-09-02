@@ -322,6 +322,7 @@ on the terminal, as in the example above. Thus there are
 also the \verb!cpp|! and \verb!|cpp! environments that will
 basically only draw a vertical line where we expect it. It
 is useful in the given cases below:
+\begin{multicols}{2}
 \begin{verbatim}
 \noindent
 \begin{minipage}{0.55\linewidth}
@@ -360,6 +361,7 @@ std::cout << E.value() << " "
 }
 \end{minipage}
 \end{verbatim}
+\end{multicols}
 That will produces\\
 \noindent
 \begin{minipage}{0.55\linewidth}
@@ -397,8 +399,10 @@ std::cout << E.value() << " "
 8.987552e+13 kg.m2.s-2%
 }
 \end{minipage}
+
 And the same thing but the other way
 around:
+\begin{multicols}{2}
 \begin{verbatim}
 \noindent
 \begin{minipage}{0.44\linewidth}
@@ -437,6 +441,7 @@ std::cout << E.value() << " "
 \end{|cpp}
 \end{minipage}
 \end{verbatim}
+\end{multicols}
 \noindent
 \begin{minipage}{0.44\linewidth}
 \terminal{%
