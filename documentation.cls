@@ -129,13 +129,16 @@
 %% definitions
 \newcommand{\unit@parser}{\;}
 \newcommand{\unitParser}[1]{\renewcommand{\unit@parser}{#1}}
-\newcommand{\unit@atom@font}{\tt}
-\newcommand{\unit@atom}[1]{\text{\unit@atom@font#1}}
+%
+\newcommand{\unit@atom@font}[1]{\mathtt{#1}}
+\newcommand{\unit@atom}[1]{\unit@atom@font{#1}}
+%
 \newcommand{\unit@power@font}[1]{\mathtt{#1}}
-\newcommand{\unit@power}[1]{\unit@atom{#1}}%{\unit@power@font{#1}}
+\newcommand{\unit@power}[1]{\unit@power@font{#1}}
 %% internal mechanism
 \newif\ifunit@power\unit@powerfalse%
 \newif\ifsubscript@\subscript@false%
+\newif\ifopen@parenthesis\open@parenthesisfalse%
 \newcount\n@letters\n@letters=0%
 \newcount\cur@letter\cur@letter=0%
 \def\unit@stack{%
@@ -178,18 +181,36 @@
 \ifx#1\relax%%
   \let\go@next=\flush@unit%
 \else%
-  \ifx#1\,%
-    \flush@unit\unit@parser%
+  \ifx#1(% parenthesis management
+    \ifnum\the\n@letters=0\else\flush@unit\fi% may not be anything before opening parenthesis
+    #1%
+    \open@parenthesistrue%
   \else%
-    \ifx^#1% if superscript
-      \flush@unit\unit@powertrue%
-    \else%
-      \ifx_#1% if subscript
-        \flush@unit\subscript@true%
-      \else%
-        \add@unit{#1}%
+    \ifx#1)% parenthesis management
+     \ifopen@parenthesis%
+        \open@parenthesisfalse%
+     \else%
+        \ClassError{documentation}{Parenthesis in unit are not balanced}
+                   {I've come across a closing parenthesis that does not seems\MessageBreak
+                    to match any opening one.}                 
       \fi%
-    \fi%
+      \flush@unit%
+      \add@unit{#1}%
+    \else%
+      \ifx#1\,%
+        \flush@unit\unit@parser%
+      \else%
+        \ifx^#1% if superscript
+          \flush@unit\unit@powertrue%
+        \else%
+          \ifx_#1% if subscript
+            \flush@unit\subscript@true%
+          \else%
+            \add@unit{#1}%
+          \fi%
+        \fi%
+      \fi
+    \fi
   \fi
 \fi%
 \go@next%
