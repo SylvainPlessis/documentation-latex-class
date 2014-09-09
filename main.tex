@@ -148,6 +148,18 @@ The \verb!\unit{}! macro supports parenthesises:
 \verb!\unit{(J\,mol^{-1})^2\,(g^2\,s^{-2})}! gives
 \unit{(J\,mol^{-1})^2\,(g^2\,s^{-2})}.
 
+Something important to note: only the parser is
+actually in math mode, the unit itself, the power
+and any subscript are in normal mode:\\
+\verb!\unit{J_{abc $x = y \times z$}^{$x^2 + y^2 = z^2$}}!:
+\unit{J_{abc $x = y \times z$}^{$x^2 + y^2 = z^2$}}.
+\smallskip
+
+To obtain the same font in math mode, use the \verb!\unitFont{}!
+command (no more `\$'!):\\
+\verb!\unit{J_{abc \unitFont{x = y \times z}}^{$x^2 + y^2 = z^2$}}!:
+\unit{J_{abc \unitFont{x = y \times z}}^{$x^2 + y^2 = z^2$}}.
+
 \chapter{Other stuff}
 \graphAtPaperCenter{chap_2}
 

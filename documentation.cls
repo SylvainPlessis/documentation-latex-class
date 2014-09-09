@@ -129,12 +129,9 @@
 %% definitions
 \newcommand{\unit@parser}{\;}
 \newcommand{\unitParser}[1]{\renewcommand{\unit@parser}{#1}}
+\newcommand{\unit@font}[1]{\ensuremath{\mathtt{#1}}}
+\newcommand{\unitFont}[1]{\unit@font{#1}}
 %
-\newcommand{\unit@atom@font}[1]{\mathtt{#1}}
-\newcommand{\unit@atom}[1]{\unit@atom@font{#1}}
-%
-\newcommand{\unit@power@font}[1]{\mathtt{#1}}
-\newcommand{\unit@power}[1]{\unit@power@font{#1}}
 %% internal mechanism
 \newif\ifunit@power\unit@powerfalse%
 \newif\ifsubscript@\subscript@false%
@@ -162,15 +159,15 @@
                  in math mode.}
 \else
   \ifunit@power% power to be printed
-     ^{\unit@power{\unit@stack}}%
+     ^{\text{\unit@stack}}%
      \unit@powerfalse%
   \else% text to be printed
     \ifsubscript@%
         \subscript@false%
         _%
     \fi% if it is a subscript
-    {\unit@atom{\unit@stack}}%
-  \fi
+    {\text{\unit@stack}}%
+  \fi%
 \fi%
 \n@letters=0%
 }
@@ -215,7 +212,11 @@
 \fi%
 \go@next%
 }
-\newcommand{\unit}[1]{\ensuremath{\protect\parse@unit#1\relax}}
+\newcommand{\unit}[1]{%
+\fontfamily{\ttdefault}%
+\ensuremath{\mathtt{\protect\parse@unit#1\relax}}%
+\fontfamily{\familydefault}%
+}%
 \newcommand{\nounit}{\unit{no~unit}}
 
 %%% physical constants equation management
